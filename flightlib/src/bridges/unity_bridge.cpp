@@ -68,9 +68,10 @@ bool UnityBridge::connectUnity(const SceneID scene_id) {
 
 bool UnityBridge::disconnectUnity() {
   unity_ready_ = false;
+  logger_.info("Flightmare Unity is disconnected.");
   // create new message object
-  pub_.close();
-  sub_.close();
+    //pub_.close();
+    //sub_.close();
   return true;
 }
 
@@ -198,6 +199,22 @@ bool UnityBridge::addStaticObject(std::shared_ptr<StaticObject> static_object) {
   return true;
 }
 
+bool UnityBridge::configureStaticObject(const int& Obj_i, std::shared_ptr<StaticObject> static_object)
+{
+  Object_t object_t;
+  object_t.ID = static_object->getID();
+  object_t.prefab_ID = static_object->getPrefabID();
+  object_t.position = positionRos2Unity(static_object->getPosition());
+  object_t.rotation = quaternionRos2Unity(static_object->getQuaternion());
+  object_t.size = scalarRos2Unity(static_object->getSize());
+
+  static_objects_[Obj_i] = static_object;
+  settings_.objects[Obj_i] = object_t;
+  pub_msg_.objects[Obj_i] = object_t;
+  //
+  return true;
+}
+
 bool UnityBridge::handleOutput() {
   // create new message object
   zmqpp::message msg;
@@ -303,5 +320,41 @@ bool UnityBridge::getPointCloud(PointCloudMessage_t& pointcloud_msg,
   }
   return true;
 }
+
+
+
+void UnityBridge::removeStaticObjects()
+{
+  // addQuadrotor
+  // rgb_cameras_.clear();
+  // unity_quadrotors_.clear();
+  // settings_.vehicles.clear();
+  // pub_msg_.vehicles.clear();
+
+  // addStaticObject
+  static_objects_.clear();
+  settings_.objects.clear();
+  pub_msg_.objects.clear();
+}
+
+void UnityBridge::resetUnity()
+{
+  // addQuadrotor
+  rgb_cameras_.clear();
+  unity_quadrotors_.clear();
+  settings_.vehicles.clear();
+  pub_msg_.vehicles.clear();
+
+  // addStaticObject
+  static_objects_.clear();
+  settings_.objects.clear();
+  pub_msg_.objects.clear();
+
+  //connectUnity
+  settings_.scene_id = 0;
+  unity_ready_ = false;
+}
+
+
 
 }  // namespace flightlib

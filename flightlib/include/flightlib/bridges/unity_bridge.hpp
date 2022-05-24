@@ -56,6 +56,7 @@ class UnityBridge {
   bool addQuadrotor(std::shared_ptr<Quadrotor> quad);
   bool addCamera(std::shared_ptr<UnityCamera> unity_camera);
   bool addStaticObject(std::shared_ptr<StaticObject> static_object);
+  bool configureStaticObject(const int& Obj_i, std::shared_ptr<StaticObject> static_object);
 
   // public auxiliary functions
   inline void setPubPort(const std::string &pub_port) { pub_port_ = pub_port; };
@@ -86,7 +87,11 @@ class UnityBridge {
   zmqpp::context context_;
   zmqpp::socket pub_{context_, zmqpp::socket_type::publish};
   zmqpp::socket sub_{context_, zmqpp::socket_type::subscribe};
+public:
   bool sendInitialSettings(void);
+  void removeStaticObjects();
+  void resetUnity();
+private:
   bool handleSettings(void);
 
   // timing variables

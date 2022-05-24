@@ -23,10 +23,11 @@ static constexpr int Dynamic = Eigen::Dynamic;
 
 // Using shorthand for `Matrix<rows, cols>` with scalar type.
 template<int rows = Dynamic, int cols = Dynamic>
-using Matrix = Eigen::Matrix<Scalar, rows, cols>;
+using Matrix = Eigen::Matrix<Scalar, rows, cols, Eigen::DontAlign>;
 
 // Using shorthand for `Matrix<rows, cols>` with scalar type.
 template<int rows = Dynamic, int cols = Dynamic>
+//using MatrixRowMajor = Eigen::Matrix<Scalar, rows, cols, Eigen::RowMajor, Eigen::DontAlign>;
 using MatrixRowMajor = Eigen::Matrix<Scalar, rows, cols, Eigen::RowMajor>;
 
 // Using shorthand for `Vector<rows>` with scalar type.
@@ -35,6 +36,7 @@ using Vector = Matrix<rows, 1>;
 
 // Vector bool
 template<int rows = Dynamic>
+//using BoolVector = Eigen::Matrix<bool, -1, 1, Eigen::DontAlign>;
 using BoolVector = Eigen::Matrix<bool, -1, 1>;
 
 // Using shorthand for `Array<rows, cols>` with scalar type.
